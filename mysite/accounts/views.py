@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth import authenticate
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework_simplejwt.tokens import RefreshToken
 import json
 
 @csrf_exempt
@@ -49,8 +50,20 @@ def login(request):
             user = authenticate(request, username=username, password=password)
 
             if user is not None:
-                auth_login(request, user)
-                return JsonResponse({"message": "Login successful"}, status=200)
+                
+                
+                refresh = RefreshToken.for_user(user)
+                return JsonResponse({
+                    "message": "Login successful",
+                      "access_token": str(refresh.access_token),
+                    "refresh_token": str(refresh),
+                    "user_id": user.id,
+                    "username": user.username
+                },status=200)
+                
+                
+                
+           
             else:
                 return JsonResponse({"error": "Invalid username or password"}, status=400)
 
