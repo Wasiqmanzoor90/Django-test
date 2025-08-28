@@ -8,7 +8,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 import json
 from .models import Todo
 @csrf_exempt
-
+#ok
 @api_view(['POST'])
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
